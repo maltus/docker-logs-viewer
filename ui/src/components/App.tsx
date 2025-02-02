@@ -2,7 +2,15 @@ import React, {useEffect} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import {Divider, FormControlLabel, FormGroup, Paper, Stack, Switch, Tooltip, Typography} from '@mui/material';
+import {
+    Divider,
+    FormControlLabel,
+    Grid2 as Grid,
+    Paper,
+    Switch,
+    Tooltip,
+    Typography
+} from '@mui/material';
 import {DockerApi} from "../api/docker-api";
 import {LogID, LogLine, sortContainers, sortLogs} from "../api/docker";
 import {LogViewTable} from "./LogViewTable";
@@ -162,57 +170,83 @@ export function App() {
                     />
                 </Paper>
 
-                <Stack direction="row" alignItems={"baseline"} justifyContent={"space-around"}>
-                    <Stack direction="row" spacing={0} alignItems={"center"}>
-                        <Typography color={"primary"} fontStyle={"italic"}>{currentLogs.length} lines</Typography>
-                    </Stack>
-                    <Stack direction="row" spacing={2} justifyContent={"flex-end"}>
-                        <FormGroup row>
-                            <FormControlLabel
-                                label="timestamp"
-                                labelPlacement={"top"}
-                                control={
-                                    <Switch
-                                        size={"small"}
-                                        checked={currentSettings.showTimestamp}
-                                        onChange={handleShowTimestampChange}/>
-                                }
-                            />
-                            <FormControlLabel
-                                label="stdout"
-                                labelPlacement={"top"}
-                                control={
-                                    <Switch
-                                        size={"small"}
-                                        checked={currentSettings.showStdout}
-                                        onChange={handleShowStdOutChange}/>
-                                }
-                            />
-                            <FormControlLabel
-                                label="stderr"
-                                labelPlacement={"top"}
-                                control={
-                                    <Switch
-                                        size={"small"}
-                                        checked={currentSettings.showStderr}
-                                        onChange={handleShowStdErrChange}
-                                    />
-                                }
-                            />
-                            <FormControlLabel
-                                label="follow output"
-                                labelPlacement={"top"}
-                                control={
-                                    <Switch
-                                        size={"small"}
-                                        checked={currentSettings.followOutput}
-                                        onChange={handleFollowOutputChange}
-                                    />
-                                }
-                            />
-                        </FormGroup>
-                    </Stack>
-                </Stack>
+                <Box flexGrow={2}>
+                    <Grid
+                        container
+                        justifyContent="space-between"
+                        alignItems="center"
+                        flexDirection={{xs: 'column', sm: 'row'}}
+                        size={6}
+                    >
+                        <Grid
+                            sx={{order: {xs: 2, sm: 1}}}
+                        >
+                            <Typography
+                                paddingTop={2}
+                                color={"primary"}
+                                fontStyle={"italic"}
+                            >
+                                {currentLogs.length} lines
+                            </Typography>
+                        </Grid>
+                        <Grid
+                            container
+                            columnSpacing={1}
+                            sx={{order: {xs: 1, sm: 2}}}
+                        >
+                            <Grid>
+                                <FormControlLabel
+                                    label="timestamp"
+                                    labelPlacement={"top"}
+                                    control={
+                                        <Switch
+                                            size={"small"}
+                                            checked={currentSettings.showTimestamp}
+                                            onChange={handleShowTimestampChange}/>
+                                    }
+                                />
+                            </Grid>
+                            <Grid>
+                                <FormControlLabel
+                                    label="stdout"
+                                    labelPlacement={"top"}
+                                    control={
+                                        <Switch
+                                            size={"small"}
+                                            checked={currentSettings.showStdout}
+                                            onChange={handleShowStdOutChange}/>
+                                    }
+                                />
+                            </Grid>
+                            <Grid>
+                                <FormControlLabel
+                                    label="stderr"
+                                    labelPlacement={"top"}
+                                    control={
+                                        <Switch
+                                            size={"small"}
+                                            checked={currentSettings.showStderr}
+                                            onChange={handleShowStdErrChange}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                            <Grid>
+                                <FormControlLabel
+                                    label="follow output"
+                                    labelPlacement={"top"}
+                                    control={
+                                        <Switch
+                                            size={"small"}
+                                            checked={currentSettings.followOutput}
+                                            onChange={handleFollowOutputChange}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Box>
             </Box>
         </Box>
     );
