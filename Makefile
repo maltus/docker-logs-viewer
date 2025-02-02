@@ -24,12 +24,12 @@ validate-extension: ## Validate the extension
 validate-metadata: ## Validate the extension
 	docker extension validate metadata.json
 
-hot-reload-start: ## hot reload start
+start-hot-reload: ## start hot reload
 	npm run --prefix ./ui build
 	docker extension dev ui-source $(IMAGE):$(TAG) http://localhost:3000
 	docker extension dev debug $(IMAGE):$(TAG)
 
-hot-reload-reset: ## hot reload reset
+reset-hot-reload: ## reset hot reload
 	docker extension dev reset $(IMAGE):$(TAG)
 
 prepare-buildx: ## Create buildx builder for multi-arch build, if not exists
