@@ -23,3 +23,12 @@ Docker extension for monitoring containers' logs with comfortable user-friendly 
 >
 > - Frontend: Node, React, Typescript, Vite, MUI.
 > - Backend: no backend.
+
+**Screenshots**
+<img src="docs/logs_viewer_01.png">
+<img src="docs/logs_viewer_02.png">
+<img src="docs/logs_viewer_03.png">
+<img src="docs/logs_viewer_04.png">
+<img src="docs/logs_viewer_05.png">
+<img src="docs/logs_viewer_06.png">
+<img src="docs/logs_viewer_07.png">
