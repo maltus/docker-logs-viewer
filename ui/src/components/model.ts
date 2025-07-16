@@ -1,4 +1,4 @@
-import {Container, LogLine} from "../api/docker";
+import {Container, LogID, LogLine} from "../api/docker";
 
 export interface Column {
     id: 'sys' | 'timestamp' | 'container' | 'message';
@@ -27,6 +27,9 @@ export interface ContainerSettings {
     showStdout: boolean
     showStderr: boolean
     showTimestamp: boolean
+    wrapLines: boolean
+    searchQuery: string | null | undefined
+    searchResult: SearchResult,
 }
 
 export const CONTAINER_AGGR = {
@@ -41,11 +44,47 @@ export function initContainerSettings(c: Readonly<Container>) {
         showStdout: true,
         showStderr: true,
         showTimestamp: true,
+        wrapLines: true,
+        searchQuery: "",
+        searchResult: initSearchResult()
     } as ContainerSettings;
 }
 
 export const initContainerSettingsList = (): ContainerSettings[] => {
     return [initContainerSettings(CONTAINER_AGGR)]
+}
+
+export const existsSearchQuery = (cs: Readonly<ContainerSettings>): boolean => {
+    return typeof cs.searchQuery === 'string' && cs.searchQuery.trim().length > 0;
+}
+
+export const hasSearchResults = (cs: Readonly<ContainerSettings>): boolean => {
+    return cs.searchResult.total > 0;
+}
+
+
+// Search
+export interface SearchResult {
+    total: number
+    positions: SearchPart[]
+    currentPosition: number
+    currentRowIdx: number
+}
+
+export interface SearchPart {
+    start: number
+    end: number
+    rowIdx: number
+    logId: LogID
+}
+
+export const initSearchResult = (): SearchResult => {
+    return {
+        currentPosition: 0,
+        currentRowIdx: 0,
+        positions: [],
+        total: 0
+    } as SearchResult
 }
 
 export const logFilterPredicate = (logLine: Readonly<LogLine>, cs: Readonly<ContainerSettings>) => {

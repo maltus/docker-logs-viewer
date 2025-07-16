@@ -16,21 +16,25 @@ import {TableComponents, TableVirtuoso} from "react-virtuoso";
 import {LogLine} from "../api/docker";
 import React from "react";
 import randomColor from "randomcolor";
+import {Highlighted} from "./Highlighted";
 
 const COLORS_MAP = new Map<string, string>()
 
 const ExpandableTableRow = (props: any) => {
     const {context, item: logLine, ...otherProps} = props;
     const isExpanded = context.isExpandedRow(logLine.logId);
+    const highlightedIdx = logLine.logId === context.currentSearchPart?.logId ? context.currentSearchPart?.start : undefined;
+    const wrapLines = context.wrapLines;
     const showTimestamp = context.showTimestamp;
     const showAllLogs = context.showAllLogs;
+    const searchQuery = context.searchQuery;
     const color = COLORS_MAP.get(logLine.containerId) || randomColor({luminosity: 'light'});
     COLORS_MAP.set(logLine.containerId, color)
 
     return (
         <>
-            <TableRow hover sx={{p: 0, m: 0}} {...otherProps}>
-                <TableCell style={{verticalAlign: 'top'}}>
+            <TableRow hover sx={{p: 0, m: 0}} {...otherProps} role={"table"}>
+                <TableCell style={{verticalAlign: 'top', whiteSpace: 'nowrap'}}>
                     <IconButton
                         aria-label="expand row"
                         size="small"
@@ -42,28 +46,27 @@ const ExpandableTableRow = (props: any) => {
                             : <ChevronDownIcon sx={{fontSize: 18}}/>
                         }
                     </IconButton>
-                    {logLine.isStderr && (
-                        <Tooltip
-                            title='stderr'
-                            arrow
-                        >
-                            <ExclamationThickIcon
-                                sx={{fontSize: 12, m: 0, p: 0}}
-                                color="error"/>
-                        </Tooltip>
-                    )}
+                    <Tooltip
+                        title='stderr'
+                        arrow
+                    >
+                        <ExclamationThickIcon
+                            visibility={logLine.isStderr ? 'normal' : 'hidden'}
+                            sx={{fontSize: 12, m: 0, p: 0}}
+                            color="error"/>
+                    </Tooltip>
                 </TableCell>
                 {
                     showTimestamp &&
                     <TableCell
-                        sx={{color: "gray", verticalAlign: 'top'}}
+                        sx={{color: "gray", verticalAlign: 'top', whiteSpace: 'nowrap'}}
                     >
                         {logLine.timestampStr.replaceAll('T', ' ').replaceAll('Z', '')}
                     </TableCell>
                 }
                 {
                     showAllLogs &&
-                    <TableCell style={{verticalAlign: 'top'}}>
+                    <TableCell style={{verticalAlign: 'top', whiteSpace: 'nowrap'}} padding={"checkbox"}>
                         <Chip
                             label={truncate(logLine.containerName, 15)}
                             sx={{
@@ -79,8 +82,10 @@ const ExpandableTableRow = (props: any) => {
                         />
                     </TableCell>
                 }
-                <TableCell>
-                    {isExpanded ? <JsonPretty message={logLine.message}/> : logLine.message}
+                <TableCell style={{width: '100%'}} padding={"checkbox"}>
+                    {isExpanded
+                        ? <JsonPretty message={logLine.message} searchQuery={searchQuery}  activeIndex={highlightedIdx}/>
+                        : <Highlighted message={logLine.message} searchQuery={searchQuery} activeIndex={highlightedIdx} wrap={wrapLines}/>}
                 </TableCell>
             </TableRow>
         </>
@@ -120,7 +125,7 @@ function fixedHeaderContent(props: { context: any }) {
     return () => (
         <TableRow>
             {actualColumns.map((column) => (
-                <TableCell
+                <TableCell padding={"checkbox"}
                     key={`col-${column.id}`}
                     variant={"head"}
                     align={column.align}
