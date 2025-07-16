@@ -5,13 +5,15 @@ Docker extension for monitoring containers' logs with comfortable user-friendly 
 **Key features:**
 
 - Collect logs in real-time
+- Search logs with navigation
 - Compact logs view: similar to CLI output  
 - Isolated tabs per container
 - Scrollable tabs horizontally
 - All logs separated tab
 - Show container status
 - Optimized rendering for big amount of logs
-- Own settings per container: 
+- Own settings per container:
+  - wrap/unwrap lines
   - show/hide sys timestamp
   - show/hide stdout
   - show/hide stderr
@@ -25,10 +27,4 @@ Docker extension for monitoring containers' logs with comfortable user-friendly 
 > - Backend: no backend.
 
 **Screenshots**
-<img src="docs/logs_viewer_01.png">
-<img src="docs/logs_viewer_02.png">
-<img src="docs/logs_viewer_03.png">
-<img src="docs/logs_viewer_04.png">
-<img src="docs/logs_viewer_05.png">
-<img src="docs/logs_viewer_06.png">
-<img src="docs/logs_viewer_07.png">
+<img src="docs/logs_viewer_home.png">
